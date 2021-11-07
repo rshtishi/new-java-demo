@@ -18,6 +18,13 @@ public class NewJavaDemo {
         printPeople(people, new SimplePersonFormatter());
         List<Person> females = filterPeople(people, new FemalePersonPredicate());
         printPeople(females, new SimplePersonFormatter());
+        //using anonymous class for passing the parametrized behaviours(person format)
+        printPeople(females, new PersonFormatter() {
+            @Override
+            public String format(Person person) {
+                return String.format("[fullName:%s]",person.getFullName());
+            }
+        });
     }
 
     public static List<Person> filterPeople(List<Person> people, PersonPredicate personPredicate) {
