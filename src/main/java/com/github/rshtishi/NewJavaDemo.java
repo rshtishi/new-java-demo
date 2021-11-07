@@ -22,7 +22,7 @@ public class NewJavaDemo {
         List<Person> filteredPeople = new ArrayList<>();
         for (Person person : people) {
             if(personPredicate.check(person)){
-                people.add(person);
+                filteredPeople.add(person);
             }
         }
         return filteredPeople;

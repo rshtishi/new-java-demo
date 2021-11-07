@@ -7,6 +7,6 @@ public class GenderFemalePersonPredicate implements PersonPredicate {
 
     @Override
     public boolean check(Person person) {
-        return person.equals(Gender.FEMALE);
+        return person.getGender().equals(Gender.FEMALE);
     }
 }
