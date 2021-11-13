@@ -1,10 +1,8 @@
 package com.github.rshtishi;
 
+import com.github.rshtishi.domain.Gender;
 import com.github.rshtishi.domain.Person;
-import com.github.rshtishi.parametrization.FemalePersonPredicate;
-import com.github.rshtishi.parametrization.PersonFormatter;
-import com.github.rshtishi.parametrization.PersonPredicate;
-import com.github.rshtishi.parametrization.SimplePersonFormatter;
+import com.github.rshtishi.parametrization.*;
 import com.github.rshtishi.service.PersonService;
 
 import java.util.ArrayList;
@@ -34,7 +32,29 @@ public class NewJavaDemo {
             return String.format("{fullName:%s, age:%d}", person.getFullName(), person.getAge());
         });
 
+        GeneralPredicate<Person>  malesPredicate = new GeneralPredicate<Person>() {
+            @Override
+            public boolean check(Person person) {
+                return person.getGender().equals(Gender.MALE);
+            }
+        };
 
+        //using anonymous classes
+        List<Person> males = filterPeople(people, malesPredicate);
+
+        printPeople(males, new SimplePersonFormatter());
+
+
+    }
+
+    public static List<Person> filterPeople(List<Person> people, GeneralPredicate<Person> generalPredicate) {
+        List<Person> filteredPeople = new ArrayList<>();
+        for (Person person : people) {
+            if (generalPredicate.check(person)) {
+                filteredPeople.add(person);
+            }
+        }
+        return filteredPeople;
     }
 
     public static List<Person> filterPeople(List<Person> people, PersonPredicate personPredicate) {
