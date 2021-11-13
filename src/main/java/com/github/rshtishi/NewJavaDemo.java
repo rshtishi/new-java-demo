@@ -15,16 +15,26 @@ public class NewJavaDemo {
     public static void main(String[] args) {
         PersonService personService = new PersonService();
         List<Person> people = personService.findAll();
+
         printPeople(people, new SimplePersonFormatter());
+
         List<Person> females = filterPeople(people, new FemalePersonPredicate());
+
         printPeople(females, new SimplePersonFormatter());
-        //using anonymous class for passing the parametrized behaviours(person format)
+        //using anonymous class for passing the parameterized behaviours(person format)
         printPeople(females, new PersonFormatter() {
             @Override
             public String format(Person person) {
-                return String.format("[fullName:%s]",person.getFullName());
+                return String.format("[fullName:%s]", person.getFullName());
             }
         });
+
+        //using lambda expression for passing the parameterized behaviours(person format)
+        printPeople(females, (person) -> {
+            return String.format("{fullName:%s, age:%d}", person.getFullName(), person.getAge());
+        });
+
+
     }
 
     public static List<Person> filterPeople(List<Person> people, PersonPredicate personPredicate) {
