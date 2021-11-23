@@ -36,7 +36,37 @@ public class FunctionalInterfaceDemo {
         //BiFunction
         System.out.println(biFunction.apply(10, 3.5));
         //BinaryOperator
-        System.out.println(binaryOperator.apply("Rando","Shtishi"));
+        System.out.println(binaryOperator.apply("Rando", "Shtishi"));
+
+        System.out.println();
+
+        IntPredicate intPredicate = (int i) -> i == 0;
+        System.out.println(intPredicate.test(0));
+        LongPredicate longPredicate = (long l) -> l > 10L;
+        System.out.println(longPredicate.test(100));
+        DoublePredicate doublePredicate = (double d) -> d < 10;
+        System.out.println(doublePredicate.test(4));
+
+        IntConsumer intConsumer = (int i) -> System.out.println(i);
+        intConsumer.accept(1);
+        LongConsumer longConsumer = (long l) -> System.out.println(l);
+        longConsumer.accept(2L);
+        DoubleConsumer doubleConsumer = (double d) -> System.out.println(d);
+        doubleConsumer.accept(3.0);
+
+        IntFunction<String> intFunction = (int i) -> "val:"+String.valueOf(i);
+        System.out.println(intFunction.apply(1));
+        IntToDoubleFunction intToDoubleFunction = (int i) -> Double.valueOf(i);
+        System.out.println(intToDoubleFunction.applyAsDouble(1));
+        IntToLongFunction intToLongFunction = (int i) -> Long.valueOf(i);
+        System.out.println(intToLongFunction.applyAsLong(1));
+
+        LongFunction<String> longFunction = (long i) -> String.valueOf(i);
+        System.out.println(longFunction.apply(1));
+        LongToDoubleFunction longToDoubleFunction = (long l) ->Double.valueOf(l);
+        System.out.println(longToDoubleFunction.applyAsDouble(5L));
+        LongToIntFunction longToIntFunction = (long l) -> 0;
+        System.out.println(longToIntFunction.applyAsInt(4));
     }
 
 }
