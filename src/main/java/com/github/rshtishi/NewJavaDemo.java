@@ -40,9 +40,5 @@ public class NewJavaDemo {
         //using anonymous classes
         List<Person> males = filterPeople(people, malesPredicate);
         printPeople(males, new SimplePersonFormatter());
-
-
     }
-
-
 }
