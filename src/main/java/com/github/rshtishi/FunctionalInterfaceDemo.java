@@ -101,8 +101,19 @@ public class FunctionalInterfaceDemo {
         LongBinaryOperator longBinaryOperator = (long a, long b) -> a + b;
         System.out.println(longBinaryOperator.applyAsLong(100L, 100L));
         DoubleBinaryOperator doubleBinaryOperator = (double a, double b) -> a + b;
-        System.out.println(doubleBinaryOperator.applyAsDouble(10.5,5.3));
-        
+        System.out.println(doubleBinaryOperator.applyAsDouble(10.5, 5.3));
+
+        ObjIntConsumer<String> objIntConsumer = (String s, int i) -> System.out.println(s + ":" + i);
+        objIntConsumer.accept("value", 10);
+        ObjLongConsumer<String> objLongConsumer = (String s, long l) -> System.out.println(s + ":" + l);
+        objLongConsumer.accept("value", 100);
+        ObjDoubleConsumer<String> objDoubleConsumer = (String s, double d) -> System.out.println(s + ":" + d);
+        objDoubleConsumer.accept("value", 10.0);
+
+        ToIntBiFunction<String, String> toIntBiFunction = (String a, String b) -> Integer.valueOf(a) + Integer.valueOf(b);
+        System.out.println(toIntBiFunction.applyAsInt("1", "2"));
+        ToLongBiFunction<String, String> toLongBiFunction = (String a, String b) -> Long.valueOf(a) + Long.valueOf(b);
+        System.out.println(toLongBiFunction.applyAsLong("1","11"));
     }
 
 }
