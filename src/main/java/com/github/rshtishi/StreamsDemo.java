@@ -99,7 +99,7 @@ public class StreamsDemo {
         //generating values with rangeClosed
         Stream<int[]> pythagorianTriples = IntStream.rangeClosed(1,100).boxed()
                 .flatMap(a ->
-                        IntStream.of(a,100).filter(b -> Math.sqrt(a*a+b*b)%1==0)
+                        IntStream.rangeClosed(a,100).filter(b -> Math.sqrt(a*a+b*b)%1==0)
                                 .mapToObj(b-> new int[]{a, b,(int) Math.sqrt(a*a+b*b)})
                 );
         pythagorianTriples.forEach(triple -> System.out.print("("+triple[0]+","+triple[1]+","+triple[2]+")"));
