@@ -5,11 +5,10 @@ import com.github.rshtishi.domain.Person;
 import com.github.rshtishi.parametrization.SimplePersonFormatter;
 import com.github.rshtishi.service.PersonService;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static com.github.rshtishi.Util.printPeople;
 
@@ -74,6 +73,38 @@ public class StreamsDemo {
 
         int min = numbers.stream().reduce(Integer.MAX_VALUE, Integer::min);
         System.out.println(min);
+
+         Optional<Integer> optionalMin = numbers.stream().min(Integer::compare);
+         System.out.println(optionalMin.get());
+
+         Optional<Integer> optionalMax = numbers.stream().max(Comparator.naturalOrder());
+         System.out.println(optionalMax.get());
+
+        //reducing joining example
+        String namesStr = people.stream().map(person -> person.getFullName())
+                .sorted()
+                .reduce("", (a, b) -> a +"," +b);
+        System.out.println(namesStr);
+
+        namesStr = people.stream().map(person -> person.getFullName())
+                .sorted() //more efficient due to the use of StringBuilder
+                .collect(Collectors.joining(","));
+        System.out.println(namesStr);
+
+        // mapping to numeric streams
+        OptionalDouble averageAge = people.stream().mapToInt(person -> person.getAge())
+                .average();
+        System.out.println(averageAge.getAsDouble());
+
+        //generating values with rangeClosed
+        Stream<int[]> pythagorianTriples = IntStream.rangeClosed(1,100).boxed()
+                .flatMap(a ->
+                        IntStream.of(a,100).filter(b -> Math.sqrt(a*a+b*b)%1==0)
+                                .mapToObj(b-> new int[]{a, b,(int) Math.sqrt(a*a+b*b)})
+                );
+        pythagorianTriples.forEach(triple -> System.out.print("("+triple[0]+","+triple[1]+","+triple[2]+")"));
+
+
 
 
     }
