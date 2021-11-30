@@ -11,6 +11,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static com.github.rshtishi.Util.printPeople;
+import static java.util.stream.Collectors.groupingBy;
 
 public class StreamsDemo {
 
@@ -74,16 +75,16 @@ public class StreamsDemo {
         int min = numbers.stream().reduce(Integer.MAX_VALUE, Integer::min);
         System.out.println(min);
 
-         Optional<Integer> optionalMin = numbers.stream().min(Integer::compare);
-         System.out.println(optionalMin.get());
+        Optional<Integer> optionalMin = numbers.stream().min(Integer::compare);
+        System.out.println(optionalMin.get());
 
-         Optional<Integer> optionalMax = numbers.stream().max(Comparator.naturalOrder());
-         System.out.println(optionalMax.get());
+        Optional<Integer> optionalMax = numbers.stream().max(Comparator.naturalOrder());
+        System.out.println(optionalMax.get());
 
         //reducing joining example
         String namesStr = people.stream().map(person -> person.getFullName())
                 .sorted()
-                .reduce("", (a, b) -> a +"," +b);
+                .reduce("", (a, b) -> a + "," + b);
         System.out.println(namesStr);
 
         namesStr = people.stream().map(person -> person.getFullName())
@@ -97,15 +98,29 @@ public class StreamsDemo {
         System.out.println(averageAge.getAsDouble());
 
         //generating values with rangeClosed
-        Stream<int[]> pythagorianTriples = IntStream.rangeClosed(1,100).boxed()
+        Stream<int[]> pythagorianTriples = IntStream.rangeClosed(1, 100).boxed()
                 .flatMap(a ->
-                        IntStream.rangeClosed(a,100).filter(b -> Math.sqrt(a*a+b*b)%1==0)
-                                .mapToObj(b-> new int[]{a, b,(int) Math.sqrt(a*a+b*b)})
+                        IntStream.rangeClosed(a, 100).filter(b -> Math.sqrt(a * a + b * b) % 1 == 0)
+                                .mapToObj(b -> new int[]{a, b, (int) Math.sqrt(a * a + b * b)})
                 );
-        pythagorianTriples.forEach(triple -> System.out.print("("+triple[0]+","+triple[1]+","+triple[2]+")"));
+        pythagorianTriples.limit(3).forEach(triple -> System.out.print("(" + triple[0] + "," + triple[1] + "," + triple[2] + ")"));
+        System.out.println();
+        // group by gender imperative style
+        Map<Gender, List<Person>> peopleByGender = new HashMap<>();
+        for (Person person : people) {
+            Gender gender = person.getGender();
+            List<Person> peopleForGender = peopleByGender.get(gender);
+            if (peopleForGender == null) {
+                peopleForGender = new ArrayList<>();
+                peopleByGender.put(gender, peopleForGender);
+            }
+            peopleForGender.add(person);
+        }
+        System.out.println(peopleByGender);
 
-
-
+        //using streams
+        peopleByGender = people.stream().collect(groupingBy(Person::getGender));
+        System.out.println(peopleByGender);
 
     }
 
