@@ -1,5 +1,6 @@
 package com.github.rshtishi;
 
+import com.github.rshtishi.domain.AgeGroup;
 import com.github.rshtishi.domain.Gender;
 import com.github.rshtishi.domain.Person;
 import com.github.rshtishi.parametrization.SimplePersonFormatter;
@@ -11,7 +12,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static com.github.rshtishi.Util.printPeople;
-import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.*;
 
 public class StreamsDemo {
 
@@ -97,6 +98,9 @@ public class StreamsDemo {
                 .average();
         System.out.println(averageAge.getAsDouble());
 
+        double avgAge = people.stream().collect(averagingInt(Person::getAge));
+        System.out.println(avgAge);
+
         //generating values with rangeClosed
         Stream<int[]> pythagorianTriples = IntStream.rangeClosed(1, 100).boxed()
                 .flatMap(a ->
@@ -121,6 +125,31 @@ public class StreamsDemo {
         //using streams
         peopleByGender = people.stream().collect(groupingBy(Person::getGender));
         System.out.println(peopleByGender);
+
+        int peopleAgeSum = people.stream().collect(summingInt(Person::getAge));
+        System.out.println(peopleAgeSum);
+
+        IntSummaryStatistics ageStatistic = people.stream().collect(summarizingInt(Person::getAge));
+        System.out.println(ageStatistic);
+
+        peopleAgeSum = people.stream().collect(reducing(0, Person::getAge, Integer::sum));
+        System.out.println(peopleAgeSum);
+
+        Map<AgeGroup, List<Person>> peopleByAgeGroup = people.stream().collect(groupingBy(person ->
+        {
+            if (person.getAge() < 35) return AgeGroup.YOUNG;
+            else if (person.getAge() < 45) return AgeGroup.MIDDLE;
+            else return AgeGroup.OLD;
+        }));
+        System.out.println(peopleByAgeGroup);
+
+        Map<AgeGroup, Long> peopleCountByAgeGroup = people.stream().collect(groupingBy(person -> {
+                    if (person.getAge() < 35) return AgeGroup.YOUNG;
+                    else if (person.getAge() < 45) return AgeGroup.MIDDLE;
+                    else return AgeGroup.OLD;
+                }, counting()
+        ));
+        System.out.println(peopleCountByAgeGroup);
 
     }
 
