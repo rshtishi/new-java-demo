@@ -7,6 +7,7 @@ import com.github.rshtishi.parametrization.SimplePersonFormatter;
 import com.github.rshtishi.service.PersonService;
 
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -151,7 +152,26 @@ public class StreamsDemo {
         ));
         System.out.println(peopleCountByAgeGroup);
 
+        Map<AgeGroup, Optional<Person>> optionalOldestPersonByAgeGroup = people.stream().collect(groupingBy(person -> {
+            if (person.getAge() < 35) return AgeGroup.YOUNG;
+            else if (person.getAge() < 45) return AgeGroup.MIDDLE;
+            else return AgeGroup.OLD;
+        }, maxBy(Comparator.comparingInt(Person::getAge))));
+
+        System.out.println(optionalOldestPersonByAgeGroup);
+
+        Map<AgeGroup, Person> oldestPersonByAgeGroup = people.stream().collect(groupingBy(person -> {
+            if (person.getAge() < 35) return AgeGroup.YOUNG;
+            else if (person.getAge() < 45) return AgeGroup.MIDDLE;
+            else return AgeGroup.OLD;
+        }, collectingAndThen(maxBy(Comparator.comparingInt(Person::getAge)), Optional::get)));
+
+        System.out.println(oldestPersonByAgeGroup);
+
+
+
     }
+
 
     private static void printPair(int[] ints) {
         System.out.println("(" + ints[0] + "," + ints[1] + ")");
