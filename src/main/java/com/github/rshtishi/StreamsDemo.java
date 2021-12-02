@@ -91,7 +91,7 @@ public class StreamsDemo {
 
         namesStr = people.stream().map(person -> person.getFullName())
                 .sorted() //more efficient due to the use of StringBuilder
-                .collect(Collectors.joining(","));
+                .collect(joining(","));
         System.out.println(namesStr);
 
         // mapping to numeric streams
@@ -168,6 +168,38 @@ public class StreamsDemo {
 
         System.out.println(oldestPersonByAgeGroup);
 
+        Map<AgeGroup, String> namesByAgeGroup = people.stream().collect(groupingBy(person -> {
+            if (person.getAge() < 35) return AgeGroup.YOUNG;
+            else if (person.getAge() < 45) return AgeGroup.MIDDLE;
+            else return AgeGroup.OLD;
+        }, Collectors.mapping(person -> person.getFullName(), joining(","))));
+
+        System.out.println(namesByAgeGroup);
+
+        Map<Boolean, List<Person>> peoplePartionedByGender = people.stream().collect(partitioningBy(person ->
+                person.getGender().equals(Gender.MALE)));
+        System.out.println(peoplePartionedByGender);
+
+        Map<Boolean, Map<AgeGroup, List<Person>>> malesByAgeGroup = people.stream().collect(partitioningBy(person ->
+                        person.getGender().equals(Gender.MALE),
+                groupingBy(person -> {
+                    if (person.getAge() < 35) return AgeGroup.YOUNG;
+                    else if (person.getAge() < 45) return AgeGroup.MIDDLE;
+                    else return AgeGroup.OLD;
+                })));
+
+        System.out.println(malesByAgeGroup);
+
+        Map<Boolean, Map<AgeGroup, String>> namesByAgeGroupPartitionedByGender = people.stream().collect(partitioningBy(
+                person -> person.getGender().equals(Gender.MALE),
+                groupingBy(person -> {
+                    if (person.getAge() < 35) return AgeGroup.YOUNG;
+                    else if (person.getAge() < 45) return AgeGroup.MIDDLE;
+                    else return AgeGroup.OLD;
+                }, Collectors.mapping(person -> person.getFullName(), joining(",")))
+        ));
+
+        System.out.println(namesByAgeGroupPartitionedByGender);
 
 
     }
