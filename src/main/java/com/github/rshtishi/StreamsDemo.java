@@ -201,6 +201,13 @@ public class StreamsDemo {
 
         System.out.println(namesByAgeGroupPartitionedByGender);
 
+        Map<Boolean, Person> youngestPersonPartionedByGender = people.stream().collect(partitioningBy(
+                person -> person.getGender().equals(Gender.MALE),
+                collectingAndThen(minBy(Comparator.comparingInt(Person::getAge)), Optional::get))
+        );
+
+        System.out.println(youngestPersonPartionedByGender);
+
 
     }
 
